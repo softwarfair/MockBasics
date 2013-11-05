@@ -8,17 +8,17 @@ import java.util.Set;
 public class ReportMaker {
 	private UserDao userDao;
 	
+	public ReportMaker(UserDao userDao) {
+		this.userDao = userDao;
+	}
+	
 	public String calculateReport() {
 		String report = null;
 						
-		Set<User> users = getUserDao().getUsers();
+		Set<User> users = userDao.getUsers();
 		// report logic that possibly iterates
 		// over all the users and aggregates data
 		
 		return report;
-	}
-	
-	protected UserDao getUserDao() {
-		return userDao;
 	}
 }
