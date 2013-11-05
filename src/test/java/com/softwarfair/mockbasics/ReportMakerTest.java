@@ -13,7 +13,8 @@ public class ReportMakerTest {
 	public void calculateReport_noUsers() {
 		int expectedActiveUsers = 0;
 		int expectedInactiveUsers = 0;
-		UserDao userDao = createMockUserDao(expectedActiveUsers, expectedInactiveUsers);
+		UserDao userDao = createMockUserDao(
+				expectedActiveUsers, expectedInactiveUsers);
 
 		ReportMaker reportMaker = new ReportMaker(userDao);
 		Report actualReport = reportMaker.calculateReportFromPersistence();
@@ -26,13 +27,24 @@ public class ReportMakerTest {
 	public void calculateReport_someUsers() {
 		int expectedActiveUsers = 1;
 		int expectedInactiveUsers = 3;
-		UserDao userDao = createMockUserDao(expectedActiveUsers, expectedInactiveUsers);
+		UserDao userDao = createMockUserDao(
+				expectedActiveUsers, expectedInactiveUsers);
 
 		ReportMaker reportMaker = new ReportMaker(userDao);
 		Report actualReport = reportMaker.calculateReportFromPersistence();
 
 		assertEquals(actualReport.getActiveUsers(), expectedActiveUsers);
 		assertEquals(actualReport.getInactiveUsers(), expectedInactiveUsers);
+	}
+
+	@Test
+	public void calculateReport_checkCollaborationOnDao() {
+		UserDao userDao = createMockUserDao(0, 0);
+
+		ReportMaker reportMaker = new ReportMaker(userDao);
+		reportMaker.calculateReportFromPersistence();
+
+		EasyMock.verify(userDao);
 	}
 
 	private UserDao createMockUserDao(int activeUsersCount, int inactiveUsersCount) {
