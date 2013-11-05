@@ -9,68 +9,69 @@ import org.easymock.EasyMock;
 import org.testng.annotations.Test;
 
 public class ReportMakerTest {
-	@Test
-	public void calculateReport_noUsers() {
-		int expectedActiveUsers = 0;
-		int expectedInactiveUsers = 0;
-		UserDao userDao = createMockUserDao(
-				expectedActiveUsers, expectedInactiveUsers);
+    @Test
+    public void calculateReport_noUsers() {
+        int expectedActiveUsers = 0;
+        int expectedInactiveUsers = 0;
+        UserDao userDao = createMockUserDao(expectedActiveUsers,
+                expectedInactiveUsers);
 
-		ReportMaker reportMaker = new ReportMaker(userDao);
-		Report actualReport = reportMaker.calculateReportFromPersistence();
+        ReportMaker reportMaker = new ReportMaker(userDao);
+        Report actualReport = reportMaker.calculateReportFromPersistence();
 
-		assertEquals(actualReport.getActiveUsers(), expectedActiveUsers);
-		assertEquals(actualReport.getInactiveUsers(), expectedInactiveUsers);
-	}
+        assertEquals(actualReport.getActiveUsers(), expectedActiveUsers);
+        assertEquals(actualReport.getInactiveUsers(), expectedInactiveUsers);
+    }
 
-	@Test
-	public void calculateReport_someUsers() {
-		int expectedActiveUsers = 1;
-		int expectedInactiveUsers = 3;
-		UserDao userDao = createMockUserDao(
-				expectedActiveUsers, expectedInactiveUsers);
+    @Test
+    public void calculateReport_someUsers() {
+        int expectedActiveUsers = 1;
+        int expectedInactiveUsers = 3;
+        UserDao userDao = createMockUserDao(expectedActiveUsers,
+                expectedInactiveUsers);
 
-		ReportMaker reportMaker = new ReportMaker(userDao);
-		Report actualReport = reportMaker.calculateReportFromPersistence();
+        ReportMaker reportMaker = new ReportMaker(userDao);
+        Report actualReport = reportMaker.calculateReportFromPersistence();
 
-		assertEquals(actualReport.getActiveUsers(), expectedActiveUsers);
-		assertEquals(actualReport.getInactiveUsers(), expectedInactiveUsers);
-	}
+        assertEquals(actualReport.getActiveUsers(), expectedActiveUsers);
+        assertEquals(actualReport.getInactiveUsers(), expectedInactiveUsers);
+    }
 
-	@Test
-	public void calculateReport_checkCollaborationOnDao() {
-		UserDao userDao = createMockUserDao(0, 0);
+    @Test
+    public void calculateReport_checkCollaborationOnDao() {
+        UserDao userDao = createMockUserDao(0, 0);
 
-		ReportMaker reportMaker = new ReportMaker(userDao);
-		reportMaker.calculateReportFromPersistence();
+        ReportMaker reportMaker = new ReportMaker(userDao);
+        reportMaker.calculateReportFromPersistence();
 
-		EasyMock.verify(userDao);
-	}
+        EasyMock.verify(userDao);
+    }
 
-	private UserDao createMockUserDao(int activeUsersCount, int inactiveUsersCount) {
-		Set<User> usersToReturnByDao =
-				createUsersToReturnByDao(activeUsersCount, inactiveUsersCount);
+    private UserDao createMockUserDao(int activeUsersCount,
+            int inactiveUsersCount) {
+        Set<User> usersToReturnByDao = createUsersToReturnByDao(
+                activeUsersCount, inactiveUsersCount);
 
-		UserDao userDao = EasyMock.createMock(UserDao.class);
-		EasyMock.expect(userDao.getUsers()).andReturn(usersToReturnByDao);
-		EasyMock.replay(userDao);
-		return userDao;
-	}
+        UserDao userDao = EasyMock.createMock(UserDao.class);
+        EasyMock.expect(userDao.getUsers()).andReturn(usersToReturnByDao);
+        EasyMock.replay(userDao);
+        return userDao;
+    }
 
-	private Set<User> createUsersToReturnByDao(
-			int activeUsersCount, int inactiveUsersCount) {
+    private Set<User> createUsersToReturnByDao(int activeUsersCount,
+            int inactiveUsersCount) {
 
-		Set<User> usersToReturnByDao = new HashSet<>();
+        Set<User> usersToReturnByDao = new HashSet<>();
 
-		addUsersToSet(inactiveUsersCount, usersToReturnByDao, false);
-		addUsersToSet(activeUsersCount, usersToReturnByDao, true);
+        addUsersToSet(inactiveUsersCount, usersToReturnByDao, false);
+        addUsersToSet(activeUsersCount, usersToReturnByDao, true);
 
-		return usersToReturnByDao;
-	}
+        return usersToReturnByDao;
+    }
 
-	private void addUsersToSet(int count, Set<User> users, boolean status) {
-		for (int i = 0; i < count; i++) {
-			users.add(new User(status));
-		}
-	}
+    private void addUsersToSet(int count, Set<User> users, boolean status) {
+        for (int i = 0; i < count; i++) {
+            users.add(new User(status));
+        }
+    }
 }
