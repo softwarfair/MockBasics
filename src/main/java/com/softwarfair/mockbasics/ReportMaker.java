@@ -6,19 +6,33 @@ import java.util.Set;
  *
  */
 public class ReportMaker {
-	private UserDao userDao;
-	
+	private final UserDao userDao;
+
 	public ReportMaker(UserDao userDao) {
 		this.userDao = userDao;
 	}
-	
-	public String calculateReport() {
-		String report = null;
-						
-		Set<User> users = userDao.getUsers();
-		// report logic that possibly iterates
-		// over all the users and aggregates data
-		
-		return report;
+
+	public Report calculateReportFromPersistence() {
+		Set<User> usersAtPersistence = getUsers();
+		return calculateReport(usersAtPersistence);
+	}
+
+	private Report calculateReport(Set<User> users) {
+		int activeUsersCount = 0;
+		int inactiveUsersCount = 0;
+
+		for (User currentUser : users) {
+			if (currentUser.isActive()) {
+				activeUsersCount++;
+			} else {
+				inactiveUsersCount++;
+			}
+		}
+
+		return new Report(activeUsersCount, inactiveUsersCount);
+	}
+
+	private Set<User> getUsers() {
+		return userDao.getUsers();
 	}
 }
