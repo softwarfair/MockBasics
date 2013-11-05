@@ -14,7 +14,7 @@ public class ReportMakerTest {
 		UserDao userDao = EasyMock.createMock(UserDao.class);
 		EasyMock.expect(userDao.getUsers()).andReturn(users);
 		EasyMock.replay(userDao);
-		
-		ReportMaker reportMaker = new ReportMaker(userDao);		
+
+		ReportMaker reportMaker = new ReportMaker(userDao);
 	}
 }
