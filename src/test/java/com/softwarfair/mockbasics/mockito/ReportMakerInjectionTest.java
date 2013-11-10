@@ -5,29 +5,34 @@ import com.softwarfair.mockbasics.Report;
 import com.softwarfair.mockbasics.ReportMaker;
 import com.softwarfair.mockbasics.User;
 import com.softwarfair.mockbasics.UserDao;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Same test as before but this time with Mockito instead of EasyMock
  */
-public class ReportMakerTest {
+@RunWith(MockitoJUnitRunner.class)
+public class ReportMakerInjectionTest {
+    @Mock
+    private UserDao mock;
+    @InjectMocks
+    private ReportMaker reportMaker = new ReportMaker();
+
+
     @Test
     public void calculateReport_noUsers() {
-        UserDao mock = Mockito.mock(UserDao.class);
         Mockito.when(mock.getUsers()).thenReturn(Collections.<User>emptySet());
 
-        ReportMaker reportMaker = new ReportMaker(mock);
         Report actualReport = reportMaker.calculateReportFromPersistence();
 
         assertEquals(actualReport.getActiveUsers(), 0);
@@ -36,14 +41,12 @@ public class ReportMakerTest {
 
     @Test
     public void calculateReport_someUsers() {
-        UserDao mock = Mockito.mock(UserDao.class);
         int expectedActiveUsers = 1;
         int expectedInactiveUsers = 3;
 
         Mockito.when(mock.getUsers()).thenReturn(createUsersToReturnByDao(expectedActiveUsers,
                 expectedInactiveUsers));
 
-        ReportMaker reportMaker = new ReportMaker(mock);
         Report actualReport = reportMaker.calculateReportFromPersistence();
 
         assertEquals(actualReport.getActiveUsers(), expectedActiveUsers);
@@ -52,10 +55,8 @@ public class ReportMakerTest {
 
     @Test
     public void calculateReport_checkCollaborationOnDao() {
-        UserDao mock = Mockito.mock(UserDao.class);
         Mockito.when(mock.getUsers()).thenReturn(Collections.<User>emptySet());
 
-        ReportMaker reportMaker = new ReportMaker(mock);
         reportMaker.calculateReportFromPersistence();
 
         Mockito.verify(mock).getUsers();

@@ -3,8 +3,10 @@ package com.softwarfair.mockbasics;
 import java.util.Set;
 
 public class ReportMaker {
-    private final UserDao userDao;
+    private UserDao userDao;
 
+    public ReportMaker() {
+    }
     public ReportMaker(UserDao userDao) {
         this.userDao = userDao;
     }
@@ -31,5 +33,9 @@ public class ReportMaker {
 
     private Set<User> getUsers() {
         return userDao.getUsers();
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 }
