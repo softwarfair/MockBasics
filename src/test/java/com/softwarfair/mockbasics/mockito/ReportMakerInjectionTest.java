@@ -21,13 +21,13 @@ import static org.junit.Assert.assertEquals;
 /**
  * Same test as before but this time with Mockito instead of EasyMock
  */
+@org.testng.annotations.Test(enabled = false)
 @RunWith(MockitoJUnitRunner.class)
 public class ReportMakerInjectionTest {
     @Mock
     private UserDao mock;
     @InjectMocks
-    private ReportMaker reportMaker = new ReportMaker();
-
+    private ReportMaker reportMaker = new ReportMaker(mock);
 
     @Test
     public void calculateReport_noUsers() {

@@ -5,8 +5,6 @@ import java.util.Set;
 public class ReportMaker {
     private UserDao userDao;
 
-    public ReportMaker() {
-    }
     public ReportMaker(UserDao userDao) {
         this.userDao = userDao;
     }
@@ -35,7 +33,4 @@ public class ReportMaker {
         return userDao.getUsers();
     }
 
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
 }
